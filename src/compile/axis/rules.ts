@@ -20,7 +20,7 @@ export function format(specifiedAxis: Axis, channel: Channel, fieldDef: FieldDef
  * If `grid` is unspecified, the default value is `true` for ordinal scales that are not binned
  */
 export function gridShow(model: Model, channel: Channel) {
-  const grid = model.axis(channel).grid;
+  const grid = model.getAxis(channel).grid;
   if (grid !== undefined) {
     return grid;
   }
@@ -44,7 +44,7 @@ export function grid(model: Model, channel: Channel, isGridAxis: boolean) {
 export function gridScale(model: Model, channel: Channel, isGridAxis: boolean) {
   if (isGridAxis) {
     const gridChannel: Channel = channel === 'x' ? 'y' : 'x';
-    if (model.scale(gridChannel)) {
+    if (model.getScale(gridChannel)) {
       return model.scaleName(gridChannel);
     }
   }

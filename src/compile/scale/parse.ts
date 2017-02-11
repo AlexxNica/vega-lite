@@ -29,14 +29,14 @@ export default function parseScaleComponent(model: Model): Dict<ScaleComponents>
  * Parse scales for a single channel of a model.
  */
 export function parseScale(model: Model, channel: Channel) {
-   if (model.scale(channel)) {
+   if (model.getScale(channel)) {
     const fieldDef = model.fieldDef(channel);
     const scales: ScaleComponents = {
       main: parseMainScale(model, channel)
     };
 
     // Add additional scale needed for the labels in the binned legend.
-    if (model.legend(channel) && fieldDef.bin && hasContinuousDomain(model.scale(channel).type)) {
+    if (model.getLegend(channel) && fieldDef.bin && hasContinuousDomain(model.getScale(channel).type)) {
       scales.binLegend = parseBinLegend(channel, model);
       scales.binLegendLabel = parseBinLegendLabel(channel, model, fieldDef);
     }
@@ -62,7 +62,7 @@ export const NON_TYPE_DOMAIN_RANGE_VEGA_SCALE_PROPERTIES: (keyof Scale)[] = [
  * Return the main scale for each channel.  (Only color can have multiple scales.)
  */
 function parseMainScale(model: Model, channel: Channel) {
-  const scale = model.scale(channel);
+  const scale = model.getScale(channel);
   const sort = model.sort(channel);
 
   let scaleComponent: VgScale = {
@@ -84,7 +84,7 @@ function parseMainScale(model: Model, channel: Channel) {
 }
 
 export function parseDomain(model: Model, channel: Channel): VgDomain {
-  const scale = model.scale(channel);
+  const scale = model.getScale(channel);
 
   // If channel is either X or Y then union them with X2 & Y2 if they exist
   if (channel === X && model.channelHasField(X2)) {

@@ -14,7 +14,7 @@ import * as rules from './rules';
 
 export function parseLegendComponent(model: UnitModel): Dict<VgLegend> {
   return [COLOR, SIZE, SHAPE, OPACITY].reduce(function(legendComponent, channel) {
-    if (model.legend(channel)) {
+    if (model.getLegend(channel)) {
       legendComponent[channel] = parseLegend(model, channel);
     }
     return legendComponent;
@@ -23,11 +23,11 @@ export function parseLegendComponent(model: UnitModel): Dict<VgLegend> {
 
 function getLegendDefWithScale(model: UnitModel, channel: Channel): VgLegend {
   // For binned field with continuous scale, use a special scale so we can overrride the mark props and labels
-  const suffix = model.fieldDef(channel).bin && hasContinuousDomain(model.scale(channel).type) ? BIN_LEGEND_SUFFIX : '';
+  const suffix = model.fieldDef(channel).bin && hasContinuousDomain(model.getScale(channel).type) ? BIN_LEGEND_SUFFIX : '';
   switch (channel) {
     case COLOR:
       const scale = model.scaleName(COLOR) + suffix;
-      return model.config().mark.filled ? {fill: scale} : {stroke: scale};
+      return model.config.mark.filled ? {fill: scale} : {stroke: scale};
     case SIZE:
       return {size: model.scaleName(SIZE) + suffix};
     case SHAPE:
@@ -40,7 +40,7 @@ function getLegendDefWithScale(model: UnitModel, channel: Channel): VgLegend {
 
 export function parseLegend(model: UnitModel, channel: Channel): VgLegend {
   const fieldDef = model.fieldDef(channel);
-  const legend = model.legend(channel);
+  const legend = model.getLegend(channel);
 
   let def: VgLegend = getLegendDefWithScale(model, channel);
 
@@ -68,13 +68,12 @@ export function parseLegend(model: UnitModel, channel: Channel): VgLegend {
 
 function getSpecifiedOrDefaultValue(property: keyof VgLegend, specifiedLegend: Legend, channel: Channel, model: Model) {
   const fieldDef = model.fieldDef(channel);
-  const config = model.config();
 
   switch (property) {
     case 'format':
-      return numberFormat(fieldDef, specifiedLegend.format, config, channel);
+      return numberFormat(fieldDef, specifiedLegend.format, model.config, channel);
     case 'title':
-      return rules.title(specifiedLegend, fieldDef, config);
+      return rules.title(specifiedLegend, fieldDef, model.config);
     case 'values':
       return rules.values(specifiedLegend);
     case 'type':

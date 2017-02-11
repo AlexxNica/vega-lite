@@ -24,7 +24,7 @@ describe('compile/scale', () => {
         }
       });
 
-      const _domain = domain(model.scale('y'), model, 'y');
+      const _domain = domain(model.getScale('y'), model, 'y');
 
       assert.deepEqual(_domain, {
         data: 'stacked',
@@ -46,7 +46,7 @@ describe('compile/scale', () => {
               }
             }
           });
-          const _domain = domain(model.scale('y'), model, 'y');
+          const _domain = domain(model.getScale('y'), model, 'y');
 
           assert.deepEqual(_domain, {
             data: SOURCE,
@@ -70,7 +70,7 @@ describe('compile/scale', () => {
               }
             }
           });
-          const _domain = domain(model.scale('y'), model, 'y') as VgDataRef;
+          const _domain = domain(model.getScale('y'), model, 'y') as VgDataRef;
 
           assert.deepEqual(_domain.data, SOURCE);
         });
@@ -88,7 +88,7 @@ describe('compile/scale', () => {
               }
             }
           });
-          const _domain = domain(model.scale('y'), model, 'y') as VgDataRef;
+          const _domain = domain(model.getScale('y'), model, 'y') as VgDataRef;
 
           assert.deepEqual(_domain.data, SUMMARY);
         });
@@ -104,7 +104,7 @@ describe('compile/scale', () => {
             }
           }
         });
-        const _domain = domain(model.scale('y'), model, 'y');
+        const _domain = domain(model.getScale('y'), model, 'y');
 
         assert.deepEqual(_domain, [0, 200]);
       });
@@ -121,7 +121,7 @@ describe('compile/scale', () => {
               }
             }
           });
-          const _domain = domain(model.scale('y'), model, 'y') as VgDataRef;
+          const _domain = domain(model.getScale('y'), model, 'y') as VgDataRef;
 
           assert.deepEqual(_domain.data, SUMMARY);
         });
@@ -140,7 +140,7 @@ describe('compile/scale', () => {
               }
             }
           });
-          const _domain = domain(model.scale('y'), model, 'y') as VgDataRef;
+          const _domain = domain(model.getScale('y'), model, 'y') as VgDataRef;
 
           assert.deepEqual(_domain.data, SOURCE);
         });
@@ -158,7 +158,7 @@ describe('compile/scale', () => {
               }
             }
           });
-          const _domain = domain(model.scale('y'), model, 'y') as VgDataRef;
+          const _domain = domain(model.getScale('y'), model, 'y') as VgDataRef;
 
           assert.deepEqual(_domain.data, SOURCE);
           assert.operator((_domain.field as string).indexOf('year'), '>', -1);
@@ -176,7 +176,7 @@ describe('compile/scale', () => {
               }
             }
           });
-          const _domain = domain(model.scale('y'), model, 'y');
+          const _domain = domain(model.getScale('y'), model, 'y');
 
           assert.deepEqual(_domain, {data: 'source', field: 'month_origin', sort: {field: 'month_origin', op: 'min',}});
         });
@@ -193,7 +193,7 @@ describe('compile/scale', () => {
                 }
               }
             });
-            const _domain = domain(model.scale('y'), model, 'y');
+            const _domain = domain(model.getScale('y'), model, 'y');
 
             assert.deepEqual(_domain, {
               data: 'source', field: 'yearmonth_origin',
@@ -212,7 +212,7 @@ describe('compile/scale', () => {
             }
           }
         });
-        const _domain = domain(model.scale('y'), model, 'y');
+        const _domain = domain(model.getScale('y'), model, 'y');
 
         assert.deepEqual(_domain, [
           new Date(1970, 0, 1).getTime(),
@@ -231,7 +231,7 @@ describe('compile/scale', () => {
             }
           });
 
-        assert.deepEqual(domain(model.scale('y'), model, 'y'), {
+        assert.deepEqual(domain(model.getScale('y'), model, 'y'), {
             data: "source",
             field: 'origin',
             sort: sortDef
@@ -246,7 +246,7 @@ describe('compile/scale', () => {
           }
         });
 
-        assert.deepEqual(domain(model.scale('y'), model, 'y'), {
+        assert.deepEqual(domain(model.getScale('y'), model, 'y'), {
           data: "source",
           field: 'origin',
           sort: true

@@ -77,7 +77,7 @@ function parseUnitSizeLayout(model: UnitModel, channel: Channel): SizeComponent 
 }
 
 export function unitSizeExpr(model: UnitModel, channel: Channel): string {
-  const scale = model.scale(channel);
+  const scale = model.getScale(channel);
   if (scale) {
 
     if (hasDiscreteDomain(scale.type) && scale.rangeStep) {
@@ -114,7 +114,7 @@ export function parseFacetLayout(model: FacetModel): LayoutComponent {
 }
 
 function parseFacetSizeLayout(model: FacetModel, channel: Channel): SizeComponent {
-  const childLayoutComponent = model.child().component.layout;
+  const childLayoutComponent = model.child.component.layout;
   const sizeType = channel === ROW ? 'height' : 'width';
   const childSizeComponent: SizeComponent = childLayoutComponent[sizeType];
 
@@ -124,7 +124,7 @@ function parseFacetSizeLayout(model: FacetModel, channel: Channel): SizeComponen
     const distinct = extend(getDistinct(model, channel), childSizeComponent.distinct);
     const formula = childSizeComponent.formula.concat([{
       as: model.channelSizeName(channel),
-      expr: facetSizeFormula(model, channel, model.child().channelSizeName(channel))
+      expr: facetSizeFormula(model, channel, model.child.channelSizeName(channel))
     }]);
 
     delete childLayoutComponent[sizeType];
@@ -141,7 +141,7 @@ function facetSizeFormula(model: FacetModel, channel: Channel, innerSize: string
   if (model.channelHasField(channel)) {
     return '(datum["' + innerSize + '"] + ' + model.spacing(channel) + ')' + ' * ' + cardinalityExpr(model, channel);
   } else {
-    return 'datum["' + innerSize + '"] + ' + model.config().scale.facetSpacing; // need to add outer padding for facet
+    return 'datum["' + innerSize + '"] + ' + model.config.scale.facetSpacing; // need to add outer padding for facet
   }
 }
 
@@ -157,7 +157,7 @@ function parseLayerSizeLayout(model: LayerModel, channel: Channel): SizeComponen
     // For shared scale, we can simply merge the layout into one data source
     // TODO: don't just take the layout from the first child
 
-    const childLayoutComponent = model.children()[0].component.layout;
+    const childLayoutComponent = model.children[0].component.layout;
     const sizeType = channel === Y ? 'height' : 'width';
     const childSizeComponent: SizeComponent = childLayoutComponent[sizeType];
 
@@ -167,7 +167,7 @@ function parseLayerSizeLayout(model: LayerModel, channel: Channel): SizeComponen
       expr: childSizeComponent.formula[0].expr
     }];
 
-    model.children().forEach((child) => {
+    model.children.forEach((child) => {
       delete child.component.layout[sizeType];
     });
 
@@ -180,7 +180,7 @@ function parseLayerSizeLayout(model: LayerModel, channel: Channel): SizeComponen
 
 function getDistinct(model: Model, channel: Channel): StringSet {
   if (model.channelHasField(channel) && model.hasDiscreteScale(channel)) {
-    const scale = model.scale(channel);
+    const scale = model.getScale(channel);
     if (hasDiscreteDomain(scale.type) && !(scale.domain instanceof Array)) {
       // if explicit domain is declared, use array length
       const distinctField = model.field(channel);
@@ -193,7 +193,7 @@ function getDistinct(model: Model, channel: Channel): StringSet {
 }
 
 export function cardinalityExpr(model: Model, channel: Channel):string {
-  const scale = model.scale(channel);
+  const scale = model.getScale(channel);
   if (scale.domain instanceof Array) {
     return scale.domain.length + '';
   }

@@ -8,7 +8,7 @@ import {Model} from '../model';
 
 // TODO: @yuhanlu -- please change method signature to require only what are really needed
 export function domain(model: Model, channel: Channel, domainPropsSpec: any, _?: VgAxis) {
-  const axis = model.axis(channel);
+  const axis = model.getAxis(channel);
 
   return extend(
     axis.axisColor !== undefined ?
@@ -23,7 +23,7 @@ export function domain(model: Model, channel: Channel, domainPropsSpec: any, _?:
 
 // TODO: @yuhanlu -- please change method signature to require only what are really needed
 export function grid(model: Model, channel: Channel, gridPropsSpec: any, _?: VgAxis) {
-  const axis = model.axis(channel);
+  const axis = model.getAxis(channel);
 
   return extend(
     axis.gridColor !== undefined ? {stroke: {value: axis.gridColor}} : {},
@@ -37,8 +37,8 @@ export function grid(model: Model, channel: Channel, gridPropsSpec: any, _?: VgA
 // TODO: @yuhanlu -- please change method signature to require only what are really needed
 export function labels(model: Model, channel: Channel, labelsSpec: any, def: VgAxis) {
   const fieldDef = model.fieldDef(channel);
-  const axis = model.axis(channel);
-  const config = model.config();
+  const axis = model.getAxis(channel);
+  const config = model.config;
 
   // Text
   if (contains([NOMINAL, ORDINAL], fieldDef.type) && axis.labelMaxLength) {
@@ -115,7 +115,7 @@ export function labels(model: Model, channel: Channel, labelsSpec: any, def: VgA
 
 // TODO: @yuhanlu -- please change method signature to require only what are really needed
 export function ticks(model: Model, channel: Channel, ticksPropsSpec: any, _?: VgAxis) {
-  const axis = model.axis(channel);
+  const axis = model.getAxis(channel);
 
   return extend(
     axis.tickColor !== undefined ? {stroke : {value: axis.tickColor}} : {},
@@ -126,7 +126,7 @@ export function ticks(model: Model, channel: Channel, ticksPropsSpec: any, _?: V
 
 // TODO: @yuhanlu -- please change method signature to require only what are really needed
 export function title(model: Model, channel: Channel, titlePropsSpec: any, _?: VgAxis) {
-  const axis = model.axis(channel);
+  const axis = model.getAxis(channel);
 
   return extend(
     axis.titleColor !== undefined ? {fill : {value: axis.titleColor}} : {},

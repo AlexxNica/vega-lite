@@ -14,7 +14,7 @@ const AXIS_PARTS: AxisPart[] = ['domain', 'grid', 'labels', 'ticks', 'title'];
 export function parseAxisComponent(model: Model, axisChannels: Channel[]): Dict<VgAxis[]> {
   return axisChannels.reduce(function(axis, channel) {
     const vgAxes: VgAxis[] = [];
-    if (model.axis(channel)) {
+    if (model.getAxis(channel)) {
       const main = parseMainAxis(channel, model);
       if (main && isVisibleAxis(main)) {
         vgAxes.push(main);
@@ -68,7 +68,7 @@ export function parseMainAxis(channel: Channel, model: Model) {
 }
 
 function parseAxis(channel: Channel, model: Model, isGridAxis: boolean): VgAxis {
-  const axis = model.axis(channel);
+  const axis = model.getAxis(channel);
 
   let vgAxis: VgAxis = {
     scale: model.scaleName(channel)
@@ -111,7 +111,6 @@ function parseAxis(channel: Channel, model: Model, isGridAxis: boolean): VgAxis 
 
 function getSpecifiedOrDefaultValue(property: keyof VgAxis, specifiedAxis: Axis, channel: Channel, model: Model, isGridAxis: boolean) {
   const fieldDef = model.fieldDef(channel);
-  const config = model.config();
 
   switch (property) {
     case 'domain':
@@ -119,7 +118,7 @@ function getSpecifiedOrDefaultValue(property: keyof VgAxis, specifiedAxis: Axis,
     case 'ticks':
       return isGridAxis ? false : specifiedAxis[property];
     case 'format':
-      return rules.format(specifiedAxis, channel, fieldDef, config);
+      return rules.format(specifiedAxis, channel, fieldDef, model.config);
     case 'grid':
       return rules.grid(model, channel, isGridAxis); // FIXME: refactor this
     case 'gridScale':
@@ -129,7 +128,7 @@ function getSpecifiedOrDefaultValue(property: keyof VgAxis, specifiedAxis: Axis,
     case 'tickCount':
       return rules.tickCount(specifiedAxis, channel, fieldDef); // TODO: scaleType
     case 'title':
-      return rules.title(specifiedAxis, fieldDef, config, isGridAxis);
+      return rules.title(specifiedAxis, fieldDef, model.config, isGridAxis);
     case 'values':
       return rules.values(specifiedAxis);
     case 'zindex':

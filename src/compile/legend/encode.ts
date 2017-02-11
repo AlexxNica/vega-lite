@@ -14,7 +14,7 @@ import {UnitModel} from '../unit';
 export function symbols(fieldDef: FieldDef, symbolsSpec: any, model: UnitModel, channel: Channel) {
   let symbols:any = {};
   const mark = model.mark();
-  const legend = model.legend(channel);
+  const legend = model.getLegend(channel);
 
   switch (mark) {
     case BAR:
@@ -33,7 +33,7 @@ export function symbols(fieldDef: FieldDef, symbolsSpec: any, model: UnitModel, 
       break;
   }
 
-  const cfg = model.config();
+  const cfg = model.config;
   const filled = cfg.mark.filled;
 
   let config = channel === COLOR ?
@@ -56,7 +56,7 @@ export function symbols(fieldDef: FieldDef, symbolsSpec: any, model: UnitModel, 
   }
 
   let value: VgValueRef;
-  const colorDef = model.encoding().color;
+  const colorDef = model.encoding.color;
   if (isValueDef(colorDef)) {
     value = {value: colorDef.value};
   }
@@ -100,7 +100,7 @@ export function symbols(fieldDef: FieldDef, symbolsSpec: any, model: UnitModel, 
     }
   }
 
-  if (fieldDef.bin && hasContinuousDomain(model.scale(channel).type)) {
+  if (fieldDef.bin && hasContinuousDomain(model.getScale(channel).type)) {
     const def = {
       scale: model.scaleName(channel),
       field: 'value'
@@ -130,12 +130,12 @@ export function symbols(fieldDef: FieldDef, symbolsSpec: any, model: UnitModel, 
 }
 
 export function labels(fieldDef: FieldDef, labelsSpec: any, model: UnitModel, channel: Channel) {
-  const legend = model.legend(channel);
-  const config = model.config();
+  const legend = model.getLegend(channel);
+  const config = model.config;
 
   let labels:any = {};
 
-  if (fieldDef.bin && hasContinuousDomain(model.scale(channel).type)) {
+  if (fieldDef.bin && hasContinuousDomain(model.getScale(channel).type)) {
     // Override label's text to map bin's quantitative value to range
     labelsSpec = extend({
       text: {
@@ -177,7 +177,7 @@ export function labels(fieldDef: FieldDef, labelsSpec: any, model: UnitModel, ch
 }
 
 export function title(_: FieldDef, titleSpec: any, model: UnitModel, channel: Channel) {
-  const legend = model.legend(channel);
+  const legend = model.getLegend(channel);
 
   let titles:any = {};
 

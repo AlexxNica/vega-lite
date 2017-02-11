@@ -25,7 +25,7 @@ describe('Axis', function() {
         },
         "data": {"url": "data/movies.json"}
       });
-      assert.deepEqual(model1.axis(Y), model2.axis(Y));
+      assert.deepEqual(model1.getAxis(Y), model2.getAxis(Y));
     });
   });
   describe('parseAxisComponent', function() {

@@ -28,10 +28,10 @@ export const rect: MarkCompiler = {
 function x(model: UnitModel) {
   let e: VgEncodeEntry = {};
 
-  const xDef = model.encoding().x;
-  const x2Def = model.encoding().x2;
+  const xDef = model.encoding.x;
+  const x2Def = model.encoding.x2;
   const xScaleName = model.scaleName(X);
-  const xScale = model.scale(X);
+  const xScale = model.getScale(X);
 
   if (isFieldDef(xDef) && xDef.bin && !x2Def) { // TODO: better check for bin
     e.x2 = ref.bin(xDef, xScaleName, 'start');
@@ -56,10 +56,10 @@ function x(model: UnitModel) {
 function y(model: UnitModel) {
   let e: VgEncodeEntry = {};
 
-  const yDef = model.encoding().y;
-  const y2Def = model.encoding().y2;
+  const yDef = model.encoding.y;
+  const y2Def = model.encoding.y2;
   const yScaleName = model.scaleName(Y);
-  const yScale = model.scale(Y);
+  const yScale = model.getScale(Y);
 
   if (isFieldDef(yDef) && yDef.bin && !y2Def) { // TODO: better check for bin
     e.y2 = ref.bin(yDef, yScaleName, 'start');
